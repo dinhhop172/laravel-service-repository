@@ -71,7 +71,7 @@ class PostRepository
      */
     public function update($data, $id)
     {
-        
+
         $post = $this->post->find($id);
 
         $post->title = $data['title'];
@@ -90,7 +90,7 @@ class PostRepository
      */
     public function delete($id)
     {
-        
+
         $post = $this->post->find($id);
         $post->delete();
 

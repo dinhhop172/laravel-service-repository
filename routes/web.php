@@ -11,8 +11,16 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('post', 'PostController');
+Route::resource('posts', 'PostController');
+// Route::get('post', 'PostController@index');
+Route::resource('users', 'UserController');
+Route::get('xinchao', function(){
+        echo '123123';
+    }
+);

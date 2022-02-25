@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Services\PostService;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class UserController extends Controller
 {
     /**
-     * @var postService
+     * userService
+     *
+     * @var mixed
      */
-    protected $postService;
+    protected $userService;
 
     /**
-     * PostController Constructor
+     * __construct
      *
-     * @param PostService $postService
-     *
+     * @param  mixed $userService
+     * @return void
      */
-    public function __construct(PostService $postService)
+    public function __construct(UserService $userService)
     {
-        $this->postService = $postService;
+        $this->userService = $userService;
     }
 
     /**
@@ -35,7 +36,7 @@ class PostController extends Controller
         $result = ['status' => 200];
 
         try {
-            $result['data'] = $this->postService->getAll();
+            $result['data'] = $this->userService->getAll();
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
@@ -53,7 +54,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -64,29 +65,24 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only([
-            'title',
-            'description',
-        ]);
-
+        $data = $request->only(['name', 'email', 'password']);
         $result = ['status' => 200];
 
         try {
-            $result['data'] = $this->postService->savePostData($data);
+            $result['data'] = $this->userService->saveUserData($data);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
                 'error' => $e->getMessage()
             ];
         }
-
-        return response()->json($result, $result['status']);
+        return $result;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -94,7 +90,7 @@ class PostController extends Controller
         $result = ['status' => 200];
 
         try {
-            $result['data'] = $this->postService->getById($id);
+            $result['data'] = $this->userService->getById($id);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
@@ -107,48 +103,42 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Post $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
         //
     }
 
     /**
-     * Update post.
+     * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $data = $request->only([
-            'title',
-            'description'
-        ]);
-
+        $data = $request->only(['name', 'email', 'password']);
         $result = ['status' => 200];
 
         try {
-            $result['data'] = $this->postService->updatePost($data, $id);
-
+            $result['data'] = $this->userService->updateUser($data, $id);
+            // $result['data'] = $this->userService->getById($id);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
                 'error' => $e->getMessage()
             ];
         }
-
-        return response()->json($result, $result['status']);
-
+        return $result;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -156,7 +146,7 @@ class PostController extends Controller
         $result = ['status' => 200];
 
         try {
-            $result['data'] = $this->postService->deleteById($id);
+            $result['data'] = $this->userService->deleteById($id);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
